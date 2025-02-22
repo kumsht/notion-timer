@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notion Auth Redirect</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f7f7f7;
+        }
+        .container {
+            text-align: center;
+            padding: 2rem;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #37352f;
+            margin-bottom: 1rem;
+        }
+        #message {
+            color: #666;
+        }
+    </style>
+    <script>
+        window.onload = function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const code = urlParams.get('code');
+            const error = urlParams.get('error');
+            const message = document.getElementById('message');
+
+            console.log('Processing auth with params:', { code, error });
+
+            if (error) {
+                message.textContent = 'Ошибка: ' + error;
+                console.error('Auth error:', error);
+                return;
+            }
+
+            if (code) {
+                message.textContent = 'Перенаправление обратно в приложение...';
+                // Замените на ваш URL Replit
+                const redirectUrl = `https://notion-timer.<YOUR_REPLIT_USERNAME>.repl.co/oauth-redirect?code=${code}`;
+                console.log('Redirecting to:', redirectUrl);
+                setTimeout(() => {
+                    window.location.href = redirectUrl;
+                }, 500);
+            } else {
+                message.textContent = 'Код авторизации не получен';
+                console.log('No code found in URL');
+            }
+        };
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>Notion Timer Auth</h1>
+        <p id="message">Обработка авторизации...</p>
+    </div>
+</body>
+</html>
