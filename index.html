@@ -36,24 +36,21 @@
             const error = urlParams.get('error');
             const message = document.getElementById('message');
 
-            console.log('Processing auth with params:', { code, error });
-
             if (error) {
                 message.textContent = 'Ошибка: ' + error;
-                console.error('Auth error:', error);
                 return;
             }
 
             if (code) {
-                message.textContent = 'Перенаправление обратно в приложение...';
-                const redirectUrl = `https://e7ff5a7d-8e59-44a8-8485-f8827f6d308e-00-2ibo9jmx73kol.picard.replit.dev/oauth-redirect?code=${code}`;
-                console.log('Redirecting to:', redirectUrl);
+                message.textContent = 'Авторизация успешна. Закройте это окно.';
+                // Отправляем код обратно в расширение
+                chrome.runtime.sendMessage({ type: 'auth_code', code: code });
+                // Закрываем окно через небольшую задержку
                 setTimeout(() => {
-                    window.location.href = redirectUrl;
-                }, 500);
+                    window.close();
+                }, 1000);
             } else {
                 message.textContent = 'Код авторизации не получен';
-                console.log('No code found in URL');
             }
         };
     </script>
@@ -64,4 +61,4 @@
         <p id="message">Обработка авторизации...</p>
     </div>
 </body>
-</html>
+</html> 
